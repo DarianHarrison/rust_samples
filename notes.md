@@ -125,6 +125,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+EOF
 ```
 ```
 cat << 'EOF' > src/main.rs
@@ -137,10 +138,12 @@ fn main() { // the main function is the entry point of many programs.
 	// Mutable var
     let mut x = 5;
     x = 6;
+    println!("{}",x)
 
 
     // Immutable var
     let y = 5;
+    println!("{}",y)
 
 
     // Constants, 
@@ -148,6 +151,7 @@ fn main() { // the main function is the entry point of many programs.
     // Constants can be declared in any scope, including the global scope, and are valid for the entire time a program runs, within the scope they were declared in.
     // constants may be set only to a constant expression, not the result of a function call or any other value that could only be computed at runtime.
     const MAX_POINTS: u32 = 100_000;
+    println!("{}",MAX_POINTS)
 
 
     // Shadowing, second variable’s value is what appears when the variable is used
@@ -156,6 +160,7 @@ fn main() { // the main function is the entry point of many programs.
     let z = 5; // 5
     let z = z + 1; // 6
     let z = z * 2; // 12
+    println!("{}",z)
 
 
     //////////// DATA TYPES ////////////
@@ -174,6 +179,7 @@ fn main() { // the main function is the entry point of many programs.
     // for best results 
     let xx = 2.0; // f64
     let yy: f32 = 3.0; // f32
+    println!("{},{}",xx, yy)
 
 
     //Numeric Operations
@@ -193,9 +199,9 @@ fn main() { // the main function is the entry point of many programs.
     // A tuple is a general way of grouping together a number of values with a variety of types into one compound type. 
     // Tuples have a fixed length: once declared, they cannot grow or shrink in size.
     // The variable tup binds to the entire tuple, because a tuple is considered a single compound element.
-	let tup: (i32, f64, u8) = (500, 6.4, 1);
-	let (x, y, z) = tup; // we can use pattern matching to destructure a tuple value; y = 6.4
-	let five_hundred = x.0; // we can access a tuple element directly 
+	let tuple_x: (i32, f64, u8) = (500, 6.4, 1);
+	let (xxx, yyy, zzz) = tuple_x; // we can use pattern matching to destructure a tuple value; yyy = 6.4
+	let five_hundred = tuple_x.0; // we can access a tuple element directly 
 	
 
 	// Array Type
@@ -213,25 +219,68 @@ fn main() { // the main function is the entry point of many programs.
 
     //////////// FUNCTIONS ////////////
 
-    // functions and expressions
 
+    // functions and expressions
 	fn another_function(x: i32) -> i32 { // declare a function that takes in an signed int type and returns signed int type
-		let y = 6;
-	    let z = { // Expressions evaluate to something
+		let y: i32 = 6;
+	    let z: i32 = { // Expressions evaluate to something
 	        x + y
 	    };
+
+        return z
 	}
 
-	let zz = another_function(5); // call the function
-    println!(zz);
+	let zz: i32 = another_function(5); // call the function
+    println!("{}", zz);
+
+
+    //////////// CONTROL FLOW ////////////
+
+
+    //if Expressions
+    let number = 6;
+
+    if number % 4 == 0 {
+        println!("number is divisible by 4");
+    } else if number % 3 == 0 {
+        println!("number is divisible by 3");
+    } else if number % 2 == 0 {
+        println!("number is divisible by 2");
+    } else {
+        println!("number is not divisible by 4, 3, or 2");
+    }  
+
+
+    //if in a let Statement
+    let condition = true;
+    let numberx = if condition { 5 } else { 6 }; // ternary
+    println!("The value of numberx is: {}", numberx);    
+
+
+    // while loops
+    let some_array = [10, 20, 30, 40, 50];
+    let mut index = 0;
+    while index < 5 {
+        println!("the value is: {}", some_array[index]);
+        index += 1;
+    }
+
+
+    // for loops
+    for e in (1..4).rev() {
+        println!("{}!", e);
+    }
+    println!("LIFTOFF!!!");
+
+
 }
 EOF
 ```
 
 ```
-cargo check # run cargo check periodically to make sure it compiles, (does not compile code)
-cargo update # update pachages in Cargo.toml
-cargo run # to compile and run
+cargo check
+cargo update
+cargo run
 ```
 
 # Chapter 4
