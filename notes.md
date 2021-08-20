@@ -336,15 +336,6 @@ fn main() {
     println!("{}", s); // This will print `hello, world!`
 
 
-    let s1 = String::from("hello");  
-    let (s2, len) = calculate_length(s1);
-    println!("The length of '{}' is {}.", s2, len);
-
-
-    // deep copy
-    let x = 5;
-    let y = x;
-
     // when s2 and s1 go out of scope, they will both try to free the same memory. 
     // This is known as a double free error and is one of the memory safety bugs we mentioned previously.
     // let s1 = String::from("hello");
