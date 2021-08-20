@@ -128,7 +128,7 @@ edition = "2018"
 ```
 ```
 cat << 'EOF' > src/main.rs
-fn main() {
+fn main() { // the main function is the entry point of many programs.
 
 
 	//////////// VARIABLES ////////////
@@ -213,14 +213,17 @@ fn main() {
 
     //////////// FUNCTIONS ////////////
 
-    // the main function is the entry point of many programs.
-	fn another_function() {
-	    println!("Another function.");
+    // functions and expressions
+
+	fn another_function(x: i32) -> i32 { // declare a function that takes in an signed int type and returns signed int type
+		let y = 6;
+	    let z = { // Expressions evaluate to something
+	        x + y
+	    };
 	}
 
-
-}
-
+	let zz = another_function(5); // call the function
+    println!(zz);
 }
 EOF
 ```
