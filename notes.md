@@ -13,20 +13,28 @@ rustc --version
 c) cargo
 ```
 cargo --version
-cargo new raghle
-cd raghle
+cargo new hello_cargo
+cd hello_cargo
 
 cat << 'EOF' > Cargo.toml
 [package]
-name = "raghle"
+name = "hello_cargo"
 version = "0.1.0"
-authors = ["Darian <darian@lion10.com>"]
-edition = "2022"
+authors = ["Your Name <you@example.com>"]
+edition = "2018"
 
 [dependencies]
 EOF
 ```
 
+```
+cargo run # to compile and run
+cargo check # run cargo check periodically to make sure it compiles, (does not compile code)
+```
+Production Build
+```
+cargo build --release # compile it with optimizations
+```
 
 
 
