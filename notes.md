@@ -101,17 +101,66 @@ fn main() {
 EOF
 ```
 ```
+cargo check # run cargo check periodically to make sure it compiles, (does not compile code)
 cargo update # update pachages in Cargo.toml
 cargo run # to compile and run
-cargo check # run cargo check periodically to make sure it compiles, (does not compile code)
 ```
 
 # Chapter 3
 
 
 
+```
+cargo new programming_concepts
+cd programming_concepts
+```
+```
+cat << 'EOF' > Cargo.toml
+[package]
+name = "programming_concepts"
+version = "0.1.0"
+authors = ["Your Name <you@example.com>"]
+edition = "2018"
 
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[dependencies]
+```
+```
+cat << 'EOF' > src/main.rs
+fn main() {
+
+	// Mutable var
+    let mut x = 5;
+    x = 6;
+
+    // Immutable var
+    let y = 5;
+
+    // Constants, 
+    // Constants type of the value must be annotated
+    // Constants can be declared in any scope, including the global scope, and are valid for the entire time a program runs, within the scope they were declared in.
+    // constants may be set only to a constant expression, not the result of a function call or any other value that could only be computed at runtime.
+    const MAX_POINTS: u32 = 100_000;
+
+    // Shadowing, second variable’s value is what appears when the variable is used
+    // By using let, we can perform a few transformations on a value but have the variable be immutable after those transformations have been completed.
+    // because we’re effectively creating a new variable when we use the let keyword again, we can change the type of the value but reuse the same name.
+    let z = 5; // 5
+    let z = z + 1; // 6
+    let z = z * 2; // 12
+
+    
+
+}
+EOF
+```
+
+```
+cargo check # run cargo check periodically to make sure it compiles, (does not compile code)
+cargo update # update pachages in Cargo.toml
+cargo run # to compile and run
+```
 
 # Chapter 4
 # Chapter 5
