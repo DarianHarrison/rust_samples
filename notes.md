@@ -1,0 +1,4 @@
+update rust
+```
+rustup update
+```
