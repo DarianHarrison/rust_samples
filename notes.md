@@ -86,8 +86,9 @@ rustc -A warnings 3.method_syntax.rs
 
 # 6. Enums and Pattern Matching
 
+A better alternative of struct. We can represent concepts in a more concise manner by putting data directly into each enum variant. ipv4 ipv6 example
+
 ```
-cd 5.structs
 
 
 ```
@@ -95,7 +96,6 @@ cd 5.structs
 # 7. Managing Growing Projects with Packages, Crates, and Modules
 
 ```
-cd 5.structs
 
 
 ```
@@ -103,7 +103,6 @@ cd 5.structs
 # 8. Common Collections
 
 ```
-cd 5.structs
 
 
 ```
@@ -111,7 +110,6 @@ cd 5.structs
 # 9. Error Handling
 
 ```
-cd 5.structs
 
 
 ```
@@ -127,7 +125,6 @@ cd 5.structs
 # 11. Writing Automated Tests
 
 ```
-cd 5.structs
 
 
 ```
@@ -135,7 +132,6 @@ cd 5.structs
 # 12. An I/O Project: Building a Command Line Program
 
 ```
-cd 5.structs
 
 
 ```
@@ -143,7 +139,6 @@ cd 5.structs
 # 13. Functional Language Features: Iterators and Closures
 
 ```
-cd 5.structs
 
 
 ```
@@ -151,7 +146,6 @@ cd 5.structs
 # 14. More about Cargo and Crates.io
 
 ```
-cd 5.structs
 
 
 ```
@@ -159,7 +153,6 @@ cd 5.structs
 # 15. Smart Pointers
 
 ```
-cd 5.structs
 
 
 ```
@@ -167,7 +160,6 @@ cd 5.structs
 # 16. Fearless Concurrency
 
 ```
-cd 5.structs
 
 
 ```
@@ -175,7 +167,6 @@ cd 5.structs
 # 17. Object Oriented Programming Features of Rust
 
 ```
-cd 5.structs
 
 
 ```
@@ -183,7 +174,6 @@ cd 5.structs
 # 18. Patterns and Matching
 
 ```
-cd 5.structs
 
 
 ```
@@ -191,7 +181,6 @@ cd 5.structs
 # 19. Advanced Features
 
 ```
-cd 5.structs
 
 
 ```
