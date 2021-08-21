@@ -307,13 +307,6 @@ However, when failure is expected, it’s more appropriate to return a Result th
 
 # 10. Generic Types, Traits, and Lifetimes
 
-- Try to decouple duplicated code where possible and put it into a function:
-
-```
-cd 5.structs
-
-
-```
 
 # 11. Writing Automated Tests
 
