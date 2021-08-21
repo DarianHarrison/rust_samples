@@ -1,83 +1,68 @@
-
-//Structs are similar to tuples
-
+// Methods are similar to functions, they are declared with the fn
+// However, methods are different from functions in that they’re defined within the context of a struct.
+// A Methods first parameter is always self, which represents the instance of the struct the method is being called on.
 
 #![allow(dead_code)] // disable warning
+#[derive(Debug)] // used for logging structs to std output
+
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+// Each struct is allowed to have multiple impl blocks.
+
+// Defining an area method on the Rectangle struct
+impl Rectangle { // To define the function within the context of Rectangle, we start an impl (implementation) block.
+    // we use &self instead of rectangle: &Rectangle because Rust knows the type of self is Rectangle due to this method’s being inside the impl Rectangle context.
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    // Implementing the can_hold method on Rectangle that takes another Rectangle instance as a parameter
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+
+
+// Associated Functions
+// impl blocks that don’t take self as a parameter. 
+// Associated functions are often used for constructors that will return a new instance of the struct. 
+impl Rectangle { // To call this associated function, we use the :: syntax with the struct name; let sq = Rectangle::square(3);
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+}
+
+
+// In the signature for area, we use &self instead of rectangle: &Rectangle because Rust knows the type of self is Rectangle due to this method’s being inside the impl Rectangle context.
 
 fn main() {
-
-    struct User {
-        username: String,
-        email: String,
-        sign_in_count: u64,
-        active: bool,
-    }
-
-    // To use an immutable struct after we’ve defined it, we create an instance of that struct by specifying concrete values for each of the fields
-    let user1 = User {
-        email: String::from("someone@example.com"),
-        username: String::from("someusername123"),
-        active: true,
-        sign_in_count: 1,
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+    let rect2 = Rectangle {
+        width: 10,
+        height: 40,
+    };
+    let rect3 = Rectangle {
+        width: 60,
+        height: 45,
     };
 
-    // create a mutable struct
-    let mut user2 = User {
-        email: String::from("someone@example.com"),
-        username: String::from("someusername123"),
-        active: true,
-        sign_in_count: 1,
-    };
+    // In Rust when you call a method with object.something(), Rust automatically adds in &, &mut, or * so object matches the signature of the method.
 
-    //To get a specific value from a struct, we can use dot notation
-    user2.email = String::from("anotheremail@example.com");
+    println!("Can rect1 hold rect2? {}", (&rect1).can_hold(&rect2)); 
+    println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2)); // same as above, this is cleaner    
+    println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
 
-    // build_user function that returns a User instance with the given email and username.
-    let user3 = build_user(
-        String::from("someone@example.com"),
-        String::from("someusername123"),
-    );
+    let sq = Rectangle::square(3);
 
 
-    //Creating Instances From Other Instances With Struct Update Syntax
-    let user2 = User {
-        email: String::from("another@example.com"),
-        username: String::from("anotherusername567"),
-        active: user1.active,
-        sign_in_count: user1.sign_in_count,
-    };
-
-    let user2 = User {
-        email: String::from("another@example.com"),
-        username: String::from("anotherusername567"),
-        ..user1
-    };
-
-    // Using Tuple Structs without Named Fields to Create Different Types
-    // you can also define structs that look similar to tuples, called tuple structs.
-    
-    struct Color(i32, i32, i32);
-    struct Point(i32, i32, i32);
-
-    let black = Color(0, 0, 0);
-    let origin = Point(0, 0, 0);
-
-
-}
-
-struct User {
-    username: String,
-    email: String,
-    sign_in_count: u64,
-    active: bool,
-}
-
-fn build_user(email: String, username: String) -> User {
-    User {
-        email: email,
-        username: username,
-        active: true,
-        sign_in_count: 1,
-    }
 }
 
