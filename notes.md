@@ -59,7 +59,7 @@ rustc -A warnings functions
 rustc -A warnings control_flow
 ```
 
-# 4. Common Programming Concepts
+# 4. Ownership
 
 todo: this chapter has some work to do, will fix in retrospective
 
@@ -73,7 +73,127 @@ rustc -A warnings slice_type
 
 # 5. Structs
 
+A struct is like an object’s data attributes
 
 ```
-rustc -A warnings dead_code main.rs
+cd 5.structs
+
+rustc -A warnings 1.structs_basics.rs
+rustc -A warnings 2.structs_example.rs
+rustc -A warnings 3.method_syntax.rs
 ```
+
+
+# 6. Enums and Pattern Matching
+
+```
+cd 5.structs
+
+
+```
+
+# 7. Managing Growing Projects with Packages, Crates, and Modules
+
+```
+cd 5.structs
+
+
+```
+
+# 8. Common Collections
+
+```
+cd 5.structs
+
+
+```
+
+# 9. Error Handling
+
+```
+cd 5.structs
+
+
+```
+
+# 10. Generic Types, Traits, and Lifetimes
+
+```
+cd 5.structs
+
+
+```
+
+# 11. Writing Automated Tests
+
+```
+cd 5.structs
+
+
+```
+
+# 12. An I/O Project: Building a Command Line Program
+
+```
+cd 5.structs
+
+
+```
+
+# 13. Functional Language Features: Iterators and Closures
+
+```
+cd 5.structs
+
+
+```
+
+# 14. More about Cargo and Crates.io
+
+```
+cd 5.structs
+
+
+```
+
+# 15. Smart Pointers
+
+```
+cd 5.structs
+
+
+```
+
+# 16. Fearless Concurrency
+
+```
+cd 5.structs
+
+
+```
+
+# 17. Object Oriented Programming Features of Rust
+
+```
+cd 5.structs
+
+
+```
+
+# 18. Patterns and Matching
+
+```
+cd 5.structs
+
+
+```
+
+# 19. Advanced Features
+
+```
+cd 5.structs
+
+
+```
+
+# 20. Final Project: Building a Multithreaded Web Server
