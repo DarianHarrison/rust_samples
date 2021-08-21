@@ -346,7 +346,7 @@ fn main() {
     // heap data does get copied.
     // When you see a call to clone, you know that some arbitrary code is being executed and that code may be expensive. It’s a visual indicator that something different is going on.
     let s5 = String::from("hello");
-    let s6 = s1.clone();
+    let s6 = s5.clone();
     println!("s5 = {}, s6 = {}", s5, s6);
 
     // Stack-Only Data: Copy
@@ -365,21 +365,43 @@ fn main() {
     // Tuples, if they only contain types that also implement Copy. For example, (i32, i32) implements Copy, but (i32, String) does not.
 
 
-}
+
+
+    let s123 = String::from("hello");  // s123 comes into scope
+    takes_ownership(s123);             // s123's value moves into the function...
+                                       // ... and so is no longer valid here
+
+    let zz = 5;                      // zz comes into scope
+
+    makes_copy(zz);                  // zz would move into the function,
+                                    // but i32 is Copy, so it's okay to still
+                                    // use zz afterward
+
+
+} // Here, x goes out of scope, then s. But because s's value was moved, nothing
+  // special happens.
+
+fn takes_ownership(some_string: String) { // some_string comes into scope
+    println!("{}", some_string);
+} // Here, some_string goes out of scope and `drop` is called. The backing
+  // memory is freed.
+
+fn makes_copy(some_integer: i32) { // some_integer comes into scope
+    println!("{}", some_integer);
+} // Here, some_integer goes out of scope. Nothing special happens.
 
 
 //////////// MEMORY AND ALLOCATION ////////////
-
 fn calculate_length(s3: String) -> (String, usize) { 
-
-
     //////////// VARIABLE SCOPE ////////////
     // Rust returns memory once the variable that owns it goes out of scope.
     let s4 = "hello"; // s4 is valid from this point forward
 
     // do stuff with s4
+    println!("{}",s4);
 
     let length = s3.len(); // len() returns the length of a String
+    println!("{}",length);
     (s3, length)
 
 } // this scope is now over, and s4 IS no longer valid
