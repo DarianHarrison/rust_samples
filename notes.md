@@ -323,16 +323,14 @@ cargo test -- --ignored # run tests that are marked as ignored (maybe it takes a
 # 12. An I/O Project: Building a Command Line Program
 
 ```
-
-
+cargo test
+cargo run to poem.txt > output.txt
 ```
 
 # 13. Functional Language Features: Iterators and Closures
 
-```
-
-
-```
+Closures, a function-like construct you can store in a variable
+Iterators, a way of processing a series of elements
 
 # 14. More about Cargo and Crates.io
 
