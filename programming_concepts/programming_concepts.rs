@@ -1,3 +1,5 @@
+#![allow(warnings)]
+
 fn main() { // the main function is the entry point of many programs.
 
 
