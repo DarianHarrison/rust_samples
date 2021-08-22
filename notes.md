@@ -83,6 +83,7 @@ A vector allows you to store a variable number of values next to each other.
 A string is a collection of characters. We’ve mentioned the String type previously, but in this chapter we’ll talk about it in depth.
 A hash map allows you to associate a value with a particular key. It’s a particular implementation of the more general data structure called a map.
 
+Note that String and Vec<T> are considered smart pointers
 
 # 9. Error Handling
 
@@ -144,10 +145,20 @@ cool documentatio feature
 
 # 15. Smart Pointers
 
-```
+a variable that contains an address in memory. This address refers to, or “points at,” some other data, the most common kind of pointer in Rust is a reference.
+
+Smart pointers, on the other hand, are data structures that also have additional metadata and capabilities. 
+* The Box<T> type has a known size and points to data allocated on the heap
+* The Rc<T> type keeps track of the number of references to data on the heap so that data can have multiple owners. Allows you to share data between multiple parts of your program for reading only. 
+* The RefCell<T> type with its interior mutability gives us a type that we can use when we need an immutable type but need to change an inner value of that type; it also enforces the borrowing rules at runtime instead of at compile time.
+* Deref : implementing Deref in such a way that a smart pointer can be treated like a regular reference, you can write code that operates on references and use that code with smart pointers too.
+* Drop traits: lets you customize what happens when a value is about to go out of scope.
 
 
-```
+Here is a recap of the reasons to choose Box<T>, Rc<T>, or RefCell<T>:
+Rc<T> enables multiple owners of the same data; Box<T> and RefCell<T> have single owners.
+Box<T> allows immutable or mutable borrows checked at compile time; Rc<T> allows only immutable borrows checked at compile time; RefCell<T> allows immutable or mutable borrows checked at runtime.
+Because RefCell<T> allows mutable borrows checked at runtime, you can mutate the value inside the RefCell<T> even when the RefCell<T> is immutable.
 
 # 16. Fearless Concurrency
 
