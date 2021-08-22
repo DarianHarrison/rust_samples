@@ -311,8 +311,13 @@ However, when failure is expected, it’s more appropriate to return a Result th
 # 11. Writing Automated Tests
 
 ```
+cd automated_tests
 
+cargo test
+cargo test -- --test-threads=1 # with multiple threads
+cargo test it_works # run only one test
 
+cargo test -- --ignored # run tests that are marked as ignored (maybe it takes an hour to run)
 ```
 
 # 12. An I/O Project: Building a Command Line Program
