@@ -332,6 +332,10 @@ cargo run to poem.txt > output.txt
 Closures, a function-like construct you can store in a variable
 Iterators, a way of processing a series of elements
 
+// The iterator version was slightly faster than for loop
+
+Closures and iterators are Rust features inspired by functional programming language ideas. They contribute to Rust’s capability to clearly express high-level ideas at low-level performance. The implementations of closures and iterators are such that runtime performance is not affected. This is part of Rust’s goal to strive to provide zero-cost abstractions.
+
 # 14. More about Cargo and Crates.io
 
 ```
@@ -375,3 +379,9 @@ Iterators, a way of processing a series of elements
 ```
 
 # 20. Final Project: Building a Multithreaded Web Server
+
+
+Best Ideas thus far:
+
+Structs as components to ML
+Iterators are faster than loops
