@@ -186,6 +186,8 @@ cargo run
 ```
 # cargo new hello
 cd hello
+cargo run hello # first example
+cargo run --bin hello_multithread # run the binary of the second example
 ```
 
 

@@ -3,6 +3,11 @@ use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
 
+use std::thread;
+use std::time::Duration;
+
+use hello::ThreadPool;
+
 fn main() {
 
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap(); // The bind function in this scenario works like the new function in that it will return a new TcpListener instance.
@@ -12,7 +17,6 @@ fn main() {
         handle_connection(stream);
     }
 }
-
 
 // In the handle_connection function, we’ve made the stream parameter mutable. 
 // The reason is that the TcpStream instance keeps track of what data it returns to us internally. 
@@ -36,9 +40,14 @@ fn handle_connection(mut stream: TcpStream) {
     let get = b"GET / HTTP/1.1\r\n"; // First, we hardcode the data corresponding to the / request into the get
     // Because we’re reading raw bytes into the buffer, we transform get into a byte string by adding the b"" byte string syntax at the start of the content data. 
 
+    let sleep = b"GET /sleep HTTP/1.1\r\n"; // add sleep path 
+
 
     // we check whether buffer starts with the bytes in get.
     let (status_line, filename) = if buffer.starts_with(get) { // If it does, it means we’ve received a well-formed request to /, which is the success case we’ll handle in the if block that returns the contents of our HTML file.
+        ("HTTP/1.1 200 OK", "hello.html")
+    } else if buffer.starts_with(sleep) { // handle sleep path simulate slow response
+        thread::sleep(Duration::from_secs(5));
         ("HTTP/1.1 200 OK", "hello.html")
     } else { // If buffer does not start with the bytes in get, it means we’ve received some other request. We’ll add code to the else block in a moment to respond to all other requests.
         ("HTTP/1.1 404 NOT FOUND", "404.html")
@@ -65,3 +74,9 @@ fn handle_connection(mut stream: TcpStream) {
 
 
 
+// Improving Throughput with a Thread Pool
+// A thread pool is a group of spawned threads that are waiting and ready to handle a task. 
+// When the program receives a new task, it assigns one of the threads in the pool to the task, and that thread will process the task. 
+// The remaining threads in the pool are available to handle any other tasks that come in while the first thread is processing. 
+
+// We’ll limit the number of threads in the pool to a small number for now
