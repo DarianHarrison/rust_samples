@@ -170,8 +170,8 @@ Because RefCell<T> allows mutable borrows checked at runtime, you can mutate the
 # 17. Object Oriented Programming Features of Rust
 
 ```
-
-
+cargo new oop_example
+cd_oop_exmaple
 ```
 
 # 18. Patterns and Matching
