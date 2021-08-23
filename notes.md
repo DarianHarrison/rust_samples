@@ -162,10 +162,10 @@ Because RefCell<T> allows mutable borrows checked at runtime, you can mutate the
 
 # 16. Fearless Concurrency
 
-```
-
-
-```
+* How to create threads to run multiple pieces of code at the same time
+* Message-passing concurrency, where channels send messages between threads
+* Shared-state concurrency, where multiple threads have access to some piece of data
+* The Sync and Send traits, which extend Rust’s concurrency guarantees to user-defined types as well as types provided by the standard library
 
 # 17. Object Oriented Programming Features of Rust
 
