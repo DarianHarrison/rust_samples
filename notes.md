@@ -199,3 +199,4 @@ Best Ideas thus far:
 Traits as components to ML
 Iterators are faster than loops
 Enums are beetter than structs
+multi-threaded message passing aggregations; where agents(processes) can share data
