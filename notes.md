@@ -172,6 +172,9 @@ Because RefCell<T> allows mutable borrows checked at runtime, you can mutate the
 ```
 cargo new oop_example
 cd_oop_exmaple
+
+cargo check
+cargo run
 ```
 
 # 18. Patterns and Matching

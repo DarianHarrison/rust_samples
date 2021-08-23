@@ -1,4 +1,4 @@
-#![allow(warnings)]
+// #![allow(warnings)]
 
 
 // A blog post starts as an empty draft.
@@ -6,9 +6,7 @@
 // When the post is approved, it gets published.
 // Only published blog posts return content to print, so unapproved posts can’t accidentally be published.
 
-
-
-use blog::Post;
+use oop_example_2::Post;
 
 fn main() {
     let mut post = Post::new();
