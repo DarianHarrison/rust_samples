@@ -149,10 +149,29 @@ A union is similar to a struct, but only one declared field is used in a particu
 
 We’ve used macros like println!
 The term macro refers to a family of features in Rust: declarative macros with macro_rules! and three kinds of procedural macros
-
-- Custom #[derive] macros that specify code added with the derive attribute used on structs and enums
-- Attribute-like macros that define custom attributes usable on any item
-- Function-like macros that look like function calls but operate on the tokens specified as their argument
+Fundamentally, macros are a way of writing code that writes other code, which is known as metaprogramming.
 
 
+- Declarative Macros with macro_rules! for General Metaprogramming
 
+	+ The most widely used form of macros in Rust is declarative macros.
+	+ At their core, declarative macros allow you to write something similar to a Rust match expression.
+
+
+- Procedural Macros for Generating Code from Attributes
+	+ The second form of macros is procedural macros, which act more like functions (and are a type of procedure). Procedural macros accept some code as an input, operate on that code, and produce some code as an output rather than matching against patterns and replacing the code with other code as declarative macros do.
+	+ The three kinds of procedural macros (custom derive, attribute-like, and function-like) all work in a similar fashion.
+
+- Custom derive Macro
+	+ Custom #[derive] macros that specify code added with the derive attribute used on structs and enums
+
+- Attribute-like macros
+	+ Attribute-like macros are similar to custom derive macros, but instead of generating code for the derive attribute, they allow you to create new attributes.
+
+- Function-like macros
+	+ Function-like macros define macros that look like function calls. Similarly to macro_rules! macros, they’re more flexible than functions; for example, they can take an unknown number of arguments.	
+
+The Difference Between Macros and Functions:
+	+ A function signature must declare the number and type of parameters the function has. Macros, on the other hand, can take a variable number of parameters: we can call println!("hello") with one argument or println!("hello {}", name) with two arguments. 
+	+ Also, macros are expanded before the compiler interprets the meaning of the code, so a macro can, for example, implement a trait on a given type. A function can’t, because it gets called at runtime and a trait needs to be implemented at compile time.
+	+ The downside to implementing a macro instead of a function is that macro definitions are more complex than function definitions because you’re writing Rust code that writes Rust code. 
