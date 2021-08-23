@@ -20,7 +20,7 @@ use std::sync::Mutex;
 
 pub struct ThreadPool { // 1. The ThreadPool will create a channel and hold on to the sending side of the channel.
     workers: Vec<Worker>, // // 2. Each Worker will hold on to the receiving side of the channel.
-    sender: mpsc::Sender<Job>,
+    sender: mpsc::Sender<Message>,
 }
 
 
@@ -69,7 +69,7 @@ impl ThreadPool {
     { // let's implement the execute method on ThreadPool.
 
         let job = Box::new(f); // a Box that holds each closure
-        self.sender.send(job).unwrap(); // and then sending the job down the channel
+        self.sender.send(Message::NewJob(job)).unwrap(); // and then sending the job down the channel
 
     }
 
@@ -78,20 +78,63 @@ impl ThreadPool {
 // A Worker Struct Responsible for Sending Code from the ThreadPool to a Thread
 struct Worker { // 1. Define a Worker struct that holds an id and a JoinHandle<()>.
     id: usize,
-    thread: thread::JoinHandle<()>,
+    thread: Option<thread::JoinHandle<()>>, // a Worker that is running will have a Some variant in thread, and when we want to clean up a Worker, we’ll replace Some with None so the Worker doesn’t have a thread to run
 }
 
 // 3. Define a Worker::new function that takes an id number and returns a Worker instance that holds the id and a thread spawned with an empty closure.
 impl Worker { // 
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker { // Receiving and executing the jobs in the worker’s thread
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Worker { // Receiving and executing the jobs in the worker’s thread
         let thread = thread::spawn(move || loop { // our closure being passed to thread::spawn  references the receiving end of the channel
-            let job = receiver.lock().unwrap().recv().unwrap(); // Here, we first call lock on the receiver to acquire the mutex, and then we call unwrap to panic on any errors.
+            let message = receiver.lock().unwrap().recv().unwrap(); // Here, we first call lock on the receiver to acquire the mutex, and then we call unwrap to panic on any errors.
 
-            println!("Worker {} got a job; executing.", id);
-
-            job();
+            match message {
+                Message::NewJob(job) => {
+                    println!("Worker {} got a job; executing.", id);
+                    job();
+                }
+                Message::Terminate => {
+                    println!("Worker {} was told to terminate.", id);
+                    break;
+                }
+            }
         });
 
-        Worker { id, thread }
+        Worker {
+            id,
+            thread: Some(thread), // we need to wrap the thread value in Some when we create a new Worker
+        }
     }
+}
+
+
+
+// Implementing the Drop Trait on ThreadPool
+impl Drop for ThreadPool {
+    fn drop(&mut self) {
+        println!("Sending terminate message to all workers.");
+
+        for _ in &self.workers {
+            self.sender.send(Message::Terminate).unwrap();
+        }
+
+        println!("Shutting down all workers.");
+
+        
+        for worker in &mut self.workers { // Joining each thread when the thread pool goes out of scope
+            println!("Shutting down worker {}", worker.id);
+
+            // We’re using if let to destructure the Some and get the thread; then we call join on the thread. 
+            // If a worker’s thread is already None, we know that worker has already had its thread cleaned up, so nothing happens in that case.
+            if let Some(thread) = worker.thread.take() { // the take method on Option takes the Some variant out and leaves None in its place. 
+                thread.join().unwrap(); 
+            }
+        }
+    }
+}
+
+
+// This Message enum will either be a NewJob variant that holds the Job the thread should run, or it will be a Terminate variant that will cause the thread to exit its loop and stop.
+enum Message {
+    NewJob(Job),
+    Terminate,
 }

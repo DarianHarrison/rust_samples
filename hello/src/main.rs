@@ -12,10 +12,17 @@ fn main() {
 
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap(); // The bind function in this scenario works like the new function in that it will return a new TcpListener instance.
 
-    for stream in listener.incoming() { // Listening for incoming streams and printing a message when we receive a stream
+    let pool = ThreadPool::new(4);
+
+    for stream in listener.incoming().take(2) { // Listening for incoming streams and printing a message when we receive a stream
         let stream = stream.unwrap();
-        handle_connection(stream);
+
+        pool.execute(|| {
+            handle_connection(stream);
+        });
     }
+
+    println!("Shutting down.");
 }
 
 // In the handle_connection function, we’ve made the stream parameter mutable. 
