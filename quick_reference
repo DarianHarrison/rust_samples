@@ -1,0 +1,120 @@
+////////////////////////////////
+
+References and Mutability:
+The & indicates that this argument is a reference, which gives you a way to let multiple parts of your code access one piece of data without needing to copy that data into memory multiple times.
+
+read_line(&mut guess)
+
+////////////////////////////////
+Match:
+
+let guess: u32 = match guess.trim().parse() {
+    Ok(num) => num,
+    Err(_) => continue,
+};
+
+match guess.cmp(&secret_number) {
+    Ordering::Less => println!("Too small!"),
+    Ordering::Greater => println!("Too big!"),
+    Ordering::Equal => {
+        println!("You win!");
+        break;
+    }
+}
+
+////////////////////////////////
+Shadowing:
+let x = x + 1;
+let x = x * 2;
+println!("The value of x is: {}", x)
+
+
+/////////////////////////////////
+isize and usize: 
+types depend on the kind of computer your program is running on: 64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit archit
+You should use usize whenever you deal with something related to container size, and u32 and u64 for everything else
+
+/////////////////////////////////
+Arrays: 
+have a fixed length and type, may be good for iterating
+
+let a = [3; 5];
+same as:  let a = [3, 3, 3, 3, 3];
+
+
+/////////////////////////////////
+Expressions:
+evaluate to something, Calling a function is an expression. Calling a macro is an expression. The block that we use to create new scopes, {}.
+
+let y = {
+    let x = 3;
+    x + 1
+};
+4
+
+/////////////////////////////////
+Control FLow:
+    let condition = true;
+    let number = if condition { 5 } else { 6 };
+
+
+
+/////////////////////////////////
+Stack-Only Data: Copy
+
+let x = 5;
+let y = x;
+
+/////////////////////////////////
+Ownership: fucntions, return values, and Scope:
+
+fn main() {
+
+    let s = String::from("hello");      // s comes into scope
+
+    takes_ownership(s);                 // s's value moves into the function ... and so is no longer valid here
+
+    let x = 5;                          // x comes into scope
+
+    makes_copy(x);                      // x would move into the function, but i32 is Copy, so it's okay to still use x afterward
+
+    let s1 = gives_ownership();         // gives_ownership moves its return value into s1
+
+    let s2 = String::from("hello");     // s2 comes into scope
+
+    let s3 = takes_and_gives_back(s2);  // s2 is moved into takes_and_gives_back, which also moves its return value into s3
+
+}   // Here, x goes out of scope, then s. But because s's value was moved, nothing special happens.
+    // s3 goes out of scope and is dropped. s2 goes out of scope but was moved, so nothing happens. s1 goes out of scope and is dropped.
+
+
+fn gives_ownership() -> String {             // gives_ownership will move its return value into the function that calls it
+    let some_string = String::from("hello"); // some_string comes into scope
+    some_string                              // some_string is returned and moves out to the calling function
+}
+
+
+// takes_and_gives_back will take a String and return one
+fn takes_and_gives_back(a_string: String) -> String { // a_string comes into scope
+    a_string  // a_string is returned and moves out to the calling function
+}
+
+
+fn takes_ownership(some_string: String) {       // some_string comes into scope
+    println!("{}", some_string);
+} // Here, some_string goes out of scope and `drop` is called. The backing memory is freed.
+
+
+fn makes_copy(some_integer: i32) {              // some_integer comes into scope
+    println!("{}", some_integer);
+} // Here, some_integer goes out of scope. Nothing special happens.
+
+
+/////////////////////////////////
+
+
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
