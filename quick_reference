@@ -5,30 +5,29 @@ References, Mutable References, and Borrowing:
     - we have to return the String to the calling function so we can still use the String after the call to calculate_length, because the String was moved into calculate_length.
     - How to modify something we’re borrowing ? We can use curly brackets to create a new scope, allowing for multiple mutable references, just not simultaneous ones:
 
-fn calculate_length(s: &String) -> usize {
+fn calculate_length(s: &String) -> usize { // only read borrowing
     s.len()
 }
 
-fn change(some_string: &mut String) {
-    some_string.push_str(", world");
+fn change(s: &mut String) { // mutable borrowing
+    s.push_str(", world");
 }
 
 fn main() {
 
-    let mut s = String::from("hello");
-    println!("s = {}", s);
+    let mut g_list = String::from("hello");
+    println!("s = {}", g_list);
 
-    let len = calculate_length(&s);
-    println!("The length of '{}' is {}.", s, len);
+    let len = calculate_length(&g_list);
+    println!("The length of '{}' is {}.", g_list, len);
 
     {
-        change(&mut s);
-        println!("s = {}", s);
+        change(&mut g_list);
+	    println!("s = {}", g_list);
     } // r1 goes out of scope here, so we can make a new reference with no problems.
 
-    change(&mut s);
+    change(&mut g_list);
     println!("s = {}", s);
-
 }
 
 
