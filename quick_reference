@@ -1,41 +1,36 @@
 ////////////////////////////////
-References and Borrowing:
+References, Mutable References, and Borrowing:
 
     - The & indicates that this argument is a reference, which gives you a way to let multiple parts of your code access one piece of data without needing to copy that data into memory multiple times.
-
     - we have to return the String to the calling function so we can still use the String after the call to calculate_length, because the String was moved into calculate_length.
-
-fn main() {
-    let s1 = String::from("hello");
-
-    let len = calculate_length(&s1);
-
-    println!("The length of '{}' is {}.", s1, len);
-}
+    - How to modify something we’re borrowing ? We can use curly brackets to create a new scope, allowing for multiple mutable references, just not simultaneous ones:
 
 fn calculate_length(s: &String) -> usize {
     s.len()
 }
 
-////////////////////////////////
-Mutable References:
-
-How to modify something we’re borrowing ?
-We can use curly brackets to create a new scope, allowing for multiple mutable references, just not simultaneous ones:
-
-fn main() {
-    let mut s = String::from("hello");
-
-    {
-        let r1 = change(&mut s);
-    } // r1 goes out of scope here, so we can make a new reference with no problems.
-
-    let r2 = change(&mut s);
-}
-
 fn change(some_string: &mut String) {
     some_string.push_str(", world");
 }
+
+fn main() {
+
+    let mut s = String::from("hello");
+    println!("s = {}", s);
+
+    let len = calculate_length(&s);
+    println!("The length of '{}' is {}.", s, len);
+
+    {
+        change(&mut s);
+        println!("s = {}", s);
+    } // r1 goes out of scope here, so we can make a new reference with no problems.
+
+    change(&mut s);
+    println!("s = {}", s);
+
+}
+
 
 ////////////////////////////////
 Match & Enum:
