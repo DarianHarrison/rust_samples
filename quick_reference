@@ -65,43 +65,27 @@ impl AveragedCollection {
     }
 }
 
+/////////////////////////////////
+Expressions:
+evaluate to something, Calling a function is an expression. Calling a macro is an expression. The block that we use to create new scopes, {}.
+
+let y = {
+    let x = 3;
+    x + 1
+};
+4
 
 ////////////////////////////////
-Match & Enum:
+Iterators:
+Using iterator adaptor methods in the implementation of the search function
 
-#[derive(Debug)]
-enum UsState {
-    Alabama,
-    Alaska,
-    // --snip--
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    contents
+        .lines()
+        .filter(|line| line.contains(query))
+        .collect()
 }
 
-enum Coin {
-    Penny,
-    Nickel,
-    Dime,
-    Quarter(UsState),
-}
-
-fn value_in_cents(coin: Coin) -> u8 {
-    match coin {
-        Coin::Penny => 1,
-        Coin::Nickel => 5,
-        Coin::Dime => 10,
-        Coin::Quarter(state) => {
-            println!("State quarter from {:?}!", state);
-            25
-        }
-    }
-}
-
-fn main() {
-    let a = value_in_cents(Coin::Quarter(UsState::Alaska));
-    println!("Value {}!", a);
-}
-
-State quarter from Alaska!
-Value 25!
 
 ////////////////////////////////
 Shadowing:
@@ -134,16 +118,15 @@ let y = {
 4
 
 /////////////////////////////////
-Control FLow:
-    let condition = true;
-    let number = if condition { 5 } else { 6 };
-
-
-/////////////////////////////////
 Ternary Opereator
 
 let mut count = 0;
 if let Coin::Quarter(state) = coin { println!("State quarter from {:?}!", state); } else { count += 1; }
+
+/////////////////////////////////
+Control FLow:
+    let condition = true;
+    let number = if condition { 5 } else { 6 };
 
 
 /////////////////////////////////
@@ -232,7 +215,70 @@ Project Structure:
 
 https://stackoverflow.com/questions/57756927/rust-modules-confusion-when-there-is-main-rs-and-lib-rs
 
+////////////////////////////////
+Closures:
+Rust’s closures are anonymous functions you can save in a variable or pass as arguments to other functions.
+
+
+use std::thread;
+use std::time::Duration;
+
+fn main() {
+
+let expensive_closure = |num| {
+    println!("calculating slowly...");
+    thread::sleep(Duration::from_secs(2));
+    num
+};
+
+    println!("Today, do {} pushups!", expensive_closure(7));
+}
+
+
+
+////////////////////////////////
+Match & Enum:
+
+#[derive(Debug)]
+enum UsState {
+    Alabama,
+    Alaska,
+    // --snip--
+}
+
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState),
+}
+
+fn value_in_cents(coin: Coin) -> u8 {
+    match coin {
+        Coin::Penny => 1,
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter(state) => {
+            println!("State quarter from {:?}!", state);
+            25
+        }
+    }
+}
+
+fn main() {
+    let a = value_in_cents(Coin::Quarter(UsState::Alaska));
+    println!("Value {}!", a);
+}
+
+State quarter from Alaska!
+Value 25!
+
+
 /////////////////////////////////
+TDD: 
+test driven development
+
+
 /////////////////////////////////
 /////////////////////////////////
 /////////////////////////////////
