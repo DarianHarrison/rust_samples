@@ -1,10 +1,12 @@
-////////////////////////////////
-References, Mutable References, and Borrowing:
+# Quick Reference
 
-    - The & indicates that this argument is a reference, which gives you a way to let multiple parts of your code access one piece of data without needing to copy that data into memory multiple times.
-    - we have to return the String to the calling function so we can still use the String after the call to calculate_length, because the String was moved into calculate_length.
-    - How to modify something we’re borrowing ? We can use curly brackets to create a new scope, allowing for multiple mutable references, just not simultaneous ones:
+## References, Mutable References, and Borrowing:
 
+* The & indicates that this argument is a reference, which gives you a way to let multiple parts of your code access one piece of data without needing to copy that data into memory multiple times.
+* we have to return the String to the calling function so we can still use the String after the call to calculate_length, because the String was moved into calculate_length.
+* How to modify something we’re borrowing ? We can use curly brackets to create a new scope, allowing for multiple mutable references, just not simultaneous ones:
+
+```rust
 fn calculate_length(s: &String) -> usize { // only read borrowing
     s.len()
 }
@@ -29,10 +31,11 @@ fn main() {
     change(&mut g_list);
     println!("s = {}", s);
 }
+```
 
-////////////////////////////////
-OOP:
+## OOP:
 
+```rust
 pub struct AveragedCollection {
     list: Vec<i32>,
     average: f64,
@@ -64,21 +67,22 @@ impl AveragedCollection {
         self.average = total as f64 / self.list.len() as f64;
     }
 }
+```
 
-/////////////////////////////////
-Expressions:
+## Expressions:
 evaluate to something, Calling a function is an expression. Calling a macro is an expression. The block that we use to create new scopes, {}.
-
+```rust
 let y = {
     let x = 3;
     x + 1
 };
+```
 4
 
-////////////////////////////////
-Iterators:
-Using iterator adaptor methods in the implementation of the search function
 
+## Iterators:
+Using iterator adaptor methods in the implementation of the search function
+```rust
 struct Counter {
     count: u32,
 }
@@ -126,65 +130,62 @@ fn main(){
 calling_next_directly();
 using_other_iterator_trait_methods();
 }
-
-
+```
 Some(1)
 Some(2)
 Some(3)
 18
-[Finished in 279ms]
 
-////////////////////////////////
-Shadowing:
+
+## Shadowing:
+```rust
 let x = x + 1;
 let x = x * 2;
 println!("The value of x is: {}", x)
+```
 
-
-/////////////////////////////////
-isize and usize: 
+## isize and usize: 
 types depend on the kind of computer your program is running on: 64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit archit
 You should use usize whenever you deal with something related to container size, and u32 and u64 for everything else
 
-/////////////////////////////////
-Arrays: 
+## Arrays: 
 have a fixed length and type, may be good for iterating
-
+```rust
 let a = [3; 5];
 same as:  let a = [3, 3, 3, 3, 3];
+```
 
-
-/////////////////////////////////
-Expressions:
+## Expressions:
 evaluate to something, Calling a function is an expression. Calling a macro is an expression. The block that we use to create new scopes, {}.
-
+```rust
 let y = {
     let x = 3;
     x + 1
 };
+```
 4
 
-/////////////////////////////////
-Ternary Opereator
-
+## Ternary Opereator
+```rust
 let mut count = 0;
 if let Coin::Quarter(state) = coin { println!("State quarter from {:?}!", state); } else { count += 1; }
+```
 
-/////////////////////////////////
-Control FLow:
-    let condition = true;
-    let number = if condition { 5 } else { 6 };
+## Control FLow:
+```rust
+let condition = true;
+let number = if condition { 5 } else { 6 };
+```
 
 
-/////////////////////////////////
-Stack-Only Data: Copy
-
+## Stack-Only Data: Copy
+```rust
 let x = 5;
 let y = x;
+```
 
-/////////////////////////////////
-Ownership: fucntions, return values, and Scope:
-
+## Ownership: fucntions, return values, and Scope:
+```rust
 fn main() {
 
     let s = String::from("hello");      // s comes into scope
@@ -225,11 +226,12 @@ fn takes_ownership(some_string: String) {       // some_string comes into scope
 fn makes_copy(some_integer: i32) {              // some_integer comes into scope
     println!("{}", some_integer);
 } // Here, some_integer goes out of scope. Nothing special happens.
+```
 
 
-/////////////////////////////////
-Structs & Methods:
+## Structs & Methods:
 
+```rust
 // define
 struct User { 
     username: String,
@@ -256,17 +258,17 @@ let mut user1 = User {
 
 user1.email = String::from("anotheremail@example.com");
 let a = user1.print_user();
+```
 
-/////////////////////////////////
-Project Structure:
+## Project Structure:
 
 https://stackoverflow.com/questions/57756927/rust-modules-confusion-when-there-is-main-rs-and-lib-rs
 
-////////////////////////////////
-Closures:
+
+## Closures:
 Rust’s closures are anonymous functions you can save in a variable or pass as arguments to other functions.
 
-
+```rust
 use std::thread;
 use std::time::Duration;
 
@@ -280,12 +282,12 @@ let expensive_closure = |num| {
 
     println!("Today, do {} pushups!", expensive_closure(7));
 }
+```
 
 
 
-////////////////////////////////
-Match & Enum:
-
+## Match & Enum:
+```rust
 #[derive(Debug)]
 enum UsState {
     Alabama,
@@ -316,7 +318,7 @@ fn main() {
     let a = value_in_cents(Coin::Quarter(UsState::Alaska));
     println!("Value {}!", a);
 }
-
+```
 State quarter from Alaska!
 Value 25!
 
