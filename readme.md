@@ -284,8 +284,6 @@ let expensive_closure = |num| {
 }
 ```
 
-
-
 ## Match & Enum:
 ```rust
 #[derive(Debug)]
@@ -323,11 +321,14 @@ State quarter from Alaska!
 Value 25!
 
 
-/////////////////////////////////
-TDD: 
+## Features:
+
+in Cargo.toml
+```rust
+[dependencies]
+ndarray = "0.15"
+rand = { version = "0.8.4", features = ["std_rng"] }
+```
+
+## TODO: TDD: 
 test driven development
-
-
-/////////////////////////////////
-/////////////////////////////////
-/////////////////////////////////
