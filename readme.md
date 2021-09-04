@@ -320,6 +320,46 @@ fn main() {
 State quarter from Alaska!
 Value 25!
 
+## Modules and Crates:
+A logical group of code is called a Module. Multiple modules are compiled into a unit called crate.
+
+* module: Logically groups code within a crate.
+* crate: Is a compilation unit in Rust; Crate is compiled to binary or library.
+* cargo: The official Rust package management tool for crates.
+
+
+```
+.
+├── Cargo.lock
+├── Cargo.toml
+├── examples
+│     ├── load_data.rs
+│     └── pre-process.rs
+├── src
+│     ├── main.rs
+│     ├── utils
+│     │     ├── skf.rs
+│     │     └── mlp.rs
+│     └── utils.rs
+└── tests
+```
+
+src/utils.rs
+```rust
+pub mod skf;
+pub mod mlp;
+```
+
+src/main.rs
+```rust
+mod utils;
+use utils::sfk;
+
+fn main(){
+}
+```
+
+
 
 ## Features:
 
