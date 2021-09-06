@@ -167,8 +167,9 @@ let y = {
 
 ## Ternary Opereator
 ```rust
-let mut count = 0;
-if let Coin::Quarter(state) = coin { println!("State quarter from {:?}!", state); } else { count += 1; }
+let i = 10
+let y_order = 3
+let mut a: Vec<usize> = if (i < y_order) { vec![y_order[i]] } else { Vec::new() };
 ```
 
 ## Control FLow:
