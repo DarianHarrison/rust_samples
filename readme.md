@@ -155,27 +155,11 @@ let a = [3; 5];
 same as:  let a = [3, 3, 3, 3, 3];
 ```
 
-## Expressions:
-evaluate to something, Calling a function is an expression. Calling a macro is an expression. The block that we use to create new scopes, {}.
-```rust
-let y = {
-    let x = 3;
-    x + 1
-};
-```
-4
-
-## Ternary Opereator
+## Pseudo Ternary Opereator / Control FLow
 ```rust
 let i = 10
 let y_order = 3
 let mut a: Vec<usize> = if (i < y_order) { vec![y_order[i]] } else { Vec::new() };
-```
-
-## Control FLow:
-```rust
-let condition = true;
-let number = if condition { 5 } else { 6 };
 ```
 
 
@@ -356,10 +340,6 @@ fn main() {
 State quarter from Alaska!
 Value 25!
 
-
-
-
-
 ## Features:
 
 in Cargo.toml
@@ -371,3 +351,8 @@ rand = { version = "0.8.4", features = ["std_rng"] }
 
 ## TODO: TDD: 
 test driven development
+
+## Design Patterns and Best Practices
+```
+https://rust-unofficial.github.io/patterns/intro.html
+```
