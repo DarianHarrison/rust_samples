@@ -433,4 +433,5 @@ b) leave the warnings flag in the code
 * remember to remove any ```#[deny(warnings)]```  because we actually want to satisfy all warnings for higher quality code
 
 c) Deref polymorphism
-* Abuse the Deref trait to emulate inheritance between structs, and thus reuse methods.
+* Try not to abuse the Deref trait to emulate inheritance between structs, and thus reuse methods.
+* The Deref trait is designed for the implementation of custom pointer types. The intention is that it will take a pointer-to-T to a T, not convert between different types.
