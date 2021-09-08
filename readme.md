@@ -401,7 +401,6 @@ https://rust-unofficial.github.io/patterns/patterns/behavioural/command.html
 b) Resource Initialization and Finalization
 * The essence of the pattern is that resource initialisation is done in the constructor of an object and finalisation in the destructor.
 
-
 c) Visitor
 * A visitor encapsulates an algorithm that operates over a heterogeneous collection of objects. It allows multiple different algorithms to be written over the same data without having to modify the data. Furthermore, the visitor pattern allows separating the traversal of a collection of objects from the operations performed on each object.
 *  If data is homogeneous, you can use an iterator-like pattern.
@@ -413,3 +412,8 @@ d) Fold (similar to map)
 * Like the visitor pattern, the fold pattern allows us to separate traversal of a data structure from the operations performed to each node.
 * Using a reference counted pointer gives the best of both worlds - we can reuse the original data structure, and we don't need to clone unchanged nodes. However, they are less ergonomic to use and mean that the data structures cannot be mutable.
 * The visitor pattern is closely related to fold. They share the concept of walking a data structure performing an operation on each node. The visitor does not create a new data structure nor consume the old one.
+
+e) Decouple code where possible
+f) Prefer small crates that do one thing well. ( encourage more modular code )
+g) Contain unsafety in small modules
+* If you have unsafe code, create the smallest possible module that can uphold the needed invariants to build a minimal safe interface upon the unsafety. 
