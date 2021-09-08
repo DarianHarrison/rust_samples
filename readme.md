@@ -452,4 +452,49 @@ println!("{}", sum);
 
 e) Generics as Type Classes
 * In Rust, a generic type parameter creates what is known in functional languages as a "type class constraint", and each different parameter filled in by an end user actually changes the type. In other words, Vec<isize> and Vec<char> are two different types, which are recognized as distinct by all parts of the type system.
+* We can create our onw custom typess
 * Rust's additional methods can be type checked when they are used, because their generics are statically defined. That makes them more usable while remaining safe.
+
+### 4) Design Principles
+* SOLID
+- Single Responsibility Principle (SRP): A class should only have a single responsibility, that is, only changes to one part of the software's specification should be able to affect the specification of the class.
+- Open/Closed Principle (OCP): "Software entities ... should be open for extension, but closed for modification."
+- Liskov Substitution Principle (LSP): "Objects in a program should be replaceable with instances of their subtypes without altering the correctness of that program."
+- Interface Segregation Principle (ISP): "Many client-specific interfaces are better than one general-purpose interface."
+- Dependency Inversion Principle (DIP): One should "depend upon abstractions, [not] concretions."
+
+* DRY (Don’t Repeat Yourself)
+- "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system
+
+* KIS principle
+- Keep it simple 
+
+* Law of Demeter (LoD)
+- a given object should assume as little as possible about the structure or properties of anything else (including its subcomponents), in accordance with the principle of "information hiding"
+
+* Design by contract (DbC)
+- software designers should define formal, precise and verifiable interface specifications for software components, which extend the ordinary definition of abstract data types with preconditions, postconditions and invariants
+
+* Encapsulation
+- bundling of data with the methods that operate on that data, or the restricting of direct access to some of an object's components.
+
+* Command-Query-Separation(CQS)
+- "Functions should not produce abstract side effects...only commands (procedures) will be permitted to produce side effects."
+
+* Principle of least astonishment (POLA)
+- a component of a system should behave in a way that most users will expect it to behave. The behavior should not astonish or surprise users
+
+* Linguistic-Modular-Units
+- Modules must correspond to syntactic units in the language used
+
+* Self-Documentation
+- The designer of a module should strive to make all information about the module part of the module itself.
+
+* Uniform-Access
+- All services offered by a module should be available through a uniform notation, which does not betray whether they are implemented through storage or through computation.
+
+* Single-Choice
+- Whenever a software system must support a set of alternatives, one and only one module in the system should know their exhaustive list.
+
+* Persistence-Closure
+- Whenever a storage mechanism stores an object, it must store with it the dependents of that object. Whenever a retrieval mechanism retrieves a previously stored object, it must also retrieve any dependent of that object that has not yet been retrieved.
