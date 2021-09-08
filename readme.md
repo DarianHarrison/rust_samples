@@ -436,7 +436,7 @@ c) Deref polymorphism
 * Try not to abuse the Deref trait to emulate inheritance between structs, and thus reuse methods.
 * The Deref trait is designed for the implementation of custom pointer types. The intention is that it will take a pointer-to-T to a T, not convert between different types.
 
-d) FUnctional rather than Imperative
+d) Functional rather than Imperative
 * choose declarative (functional) approach
 ```rust
 println!("{}", (1..11).fold(0, |a, b| a + b));
@@ -449,3 +449,7 @@ for i in 1..11 {
 }
 println!("{}", sum);
 ```
+
+e) Generics as Type Classes
+* In Rust, a generic type parameter creates what is known in functional languages as a "type class constraint", and each different parameter filled in by an end user actually changes the type. In other words, Vec<isize> and Vec<char> are two different types, which are recognized as distinct by all parts of the type system.
+* Rust's additional methods can be type checked when they are used, because their generics are statically defined. That makes them more usable while remaining safe.
