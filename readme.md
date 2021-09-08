@@ -349,10 +349,30 @@ ndarray = "0.15"
 rand = { version = "0.8.4", features = ["std_rng"] }
 ```
 
-## TODO: TDD: 
+## Template Strings
+```rust
+let name = world;
+format!("Hello {}!", name);
+```
+
+## TODO: Test Driven Development
 test driven development
 
 ## Design Patterns and Best Practices
 ```
 https://rust-unofficial.github.io/patterns/intro.html
 ```
+TLDR; 
+
+a) Use borrowed types for arguments
+* you should always prefer using the **borrowed** type over **borrowing the owned type**. Such as &str over &String, &[T] over &Vec<T>, or &T over &Box<T>.
+
+b) Finalisation in destructors
+* Rust does not provide the equivalent to finally blocks - code that will be executed no matter how a function is exited. 
+* Instead, an object's destructor can be used to run code that must be run before exit.
+
+c) mem::{take(_), replace(_)} to keep owned values in changed enums
+* When working with enums, we may want to change an enum value in place, perhaps to another variant.
+* The borrow checker won't allow us to take out name of the enum (because something must be there.) We could of course .clone() name and put the clone into our MyEnum::B, but that would be an instance of the Clone to satisfy the borrow checker anti-pattern.
+* mem::take lets us swap out the value, replacing it with it's default value, and returning the previous value. For String, the default value is an empty String, which does not need to allocate. As a result, we get the original name as an owned value. We can then wrap this in another enum.
+
