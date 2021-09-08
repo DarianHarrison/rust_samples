@@ -417,3 +417,20 @@ e) Decouple code where possible
 f) Prefer small crates that do one thing well. ( encourage more modular code )
 g) Contain unsafety in small modules
 * If you have unsafe code, create the smallest possible module that can uphold the needed invariants to build a minimal safe interface upon the unsafety. 
+
+### 3) Anti-Patterns
+
+a) Clone to satisfy the borrow checker
+
+* The borrow checker prevents Rust users from developing otherwise unsafe code by ensuring that either: 
+1) only one mutable reference exists, or 
+2) potentially many but all immutable references exist. 
+
+* Using .clone() causes a copy of the data to be made. Any changes between the two are not synchronized -- as if two completely separate variables exist
+* In general, clones should be deliberate, with full understanding of the consequences. If a clone is used to make a borrow checker error disappear, that's a good indication this anti-pattern may be in use.
+
+b) leave the warnings flag in the code
+* remember to remove any ```#[deny(warnings)]```  because we actually want to satisfy all warnings for higher quality code
+
+c) Deref polymorphism
+* Abuse the Deref trait to emulate inheritance between structs, and thus reuse methods.
