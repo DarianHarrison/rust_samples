@@ -435,3 +435,17 @@ b) leave the warnings flag in the code
 c) Deref polymorphism
 * Try not to abuse the Deref trait to emulate inheritance between structs, and thus reuse methods.
 * The Deref trait is designed for the implementation of custom pointer types. The intention is that it will take a pointer-to-T to a T, not convert between different types.
+
+d) FUnctional rather than Imperative
+* choose declarative (functional) approach
+```rust
+println!("{}", (1..11).fold(0, |a, b| a + b));
+```
+* instead of imperative approach
+```rust
+let mut sum = 0;
+for i in 1..11 {
+    sum += i;
+}
+println!("{}", sum);
+```
