@@ -364,6 +364,8 @@ https://rust-unofficial.github.io/patterns/intro.html
 ```
 TLDR; 
 
+### 1) Idioms
+
 a) Use borrowed types for arguments
 * you should always prefer using the **borrowed** type over **borrowing the owned type**. Such as &str over &String, &[T] over &Vec<T>, or &T over &Box<T>.
 
@@ -386,3 +388,28 @@ let data = data;
 
 // Here `data` is immutable.
 ```
+
+### 2) Design Patterns
+
+a) Command: 
+* The basic idea of the Command pattern is to separate out actions into its own objects and pass them as parameters.
+* Example: Suppose we have a sequence of actions or transactions encapsulated as objects. We want these actions or commands to be executed or invoked in some order later at different time. These commands may also be triggered as a result of some event. For example, when a user pushes a button, or on arrival of a data packet
+```
+https://rust-unofficial.github.io/patterns/patterns/behavioural/command.html
+```
+
+b) Resource Initialization and Finalization
+* The essence of the pattern is that resource initialisation is done in the constructor of an object and finalisation in the destructor.
+
+
+c) Visitor
+* A visitor encapsulates an algorithm that operates over a heterogeneous collection of objects. It allows multiple different algorithms to be written over the same data without having to modify the data. Furthermore, the visitor pattern allows separating the traversal of a collection of objects from the operations performed on each object.
+*  If data is homogeneous, you can use an iterator-like pattern.
+* Using a visitor object (rather than a functional approach) allows the visitor to be stateful and thus communicate information between nodes.
+* The visitor pattern is closely related to fold. They share the concept of walking a data structure performing an operation on each node. The visitor does not create a new data structure nor consume the old one.
+
+d) Fold (similar to map)
+* Run an algorithm over each item in a collection of data to create a new item, thus creating a whole new collection.
+* Like the visitor pattern, the fold pattern allows us to separate traversal of a data structure from the operations performed to each node.
+* Using a reference counted pointer gives the best of both worlds - we can reuse the original data structure, and we don't need to clone unchanged nodes. However, they are less ergonomic to use and mean that the data structures cannot be mutable.
+* The visitor pattern is closely related to fold. They share the concept of walking a data structure performing an operation on each node. The visitor does not create a new data structure nor consume the old one.
