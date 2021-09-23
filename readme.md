@@ -340,6 +340,58 @@ fn main() {
 State quarter from Alaska!
 Value 25!
 
+## Smart Pointers
+* Smart pointers: are data structures that act like a pointer and also have additional metadata and capabilities, the most common smart pointers in the standard library are:
+* Deref : implementing Deref allows smart pointer to be treated like a regular references.
+* Drop traits: lets you customize what happens when a value is about to go out of scope.
+
+
+1. The **Box<T>** type has a known size and points to data allocated on the heap, You’ll use them most often in these situations:
+    -   When you have a type whose size can’t be known at compile time and you want to use a value of that type in a context that requires an exact size
+    -   When you have a large amount of data and you want to transfer ownership but ensure the data won’t be copied when you do so
+    -   When you want to own a value and you care only that it’s a type that implements a particular trait rather than being of a specific type
+```Rust
+fn main() {
+
+    let x = 5;
+    // Storing an i32 value on the heap using a box
+    let y = Box::new(x);
+
+    println!("{:?}", x);
+
+    // Using the dereference operator to follow a reference to an i32 value
+    println!("{:?}", *y);
+}
+```
+
+2. The **Rc<T>** (Reference Counting) type keeps track of the number of references to data on the heap so that data can have multiple owners. Allows you to share data between multiple parts of your program for reading only. 
+```Rust
+// Example: Printing the reference count
+
+enum List {
+    Cons(i32, Rc<List>),
+    Nil,
+}
+
+use crate::List::{Cons, Nl};
+use std::rc::Rc;
+
+fn main() {
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    println!("count after creating a = {}", Rc::strong_count(&a));
+    let b = Cons(3, Rc::clone(&a));
+    println!("count after creating b = {}", Rc::strong_count(&a));
+    {
+        let c = Cons(4, Rc::clone(&a));
+        println!("count after creating c = {}", Rc::strong_count(&a));
+    }
+    println!("count after c goes out of scope = {}", Rc::strong_count(&a));
+}
+```
+
+3.  The **RefCell<T>** type with its interior mutability gives us a type that we can use when we need an immutable type but need to change an inner value of that type; it also enforces the borrowing rules at runtime instead of at compile time.
+
+
 ## Features:
 
 in Cargo.toml
