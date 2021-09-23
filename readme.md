@@ -162,6 +162,300 @@ let y_order = 3
 let mut a: Vec<usize> = if (i < y_order) { vec![y_order[i]] } else { Vec::new() };
 ```
 
+## Generic Data Types
+We can use generics to create definitions for items like function signatures or structs, which we can then use with many different concrete data types.
+```Rust
+struct Point<T, U> {
+    x: T,
+    y: U,
+}
+
+impl<T, U> Point<T, U> {
+    fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {
+        Point {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+
+fn main() {
+    let p1 = Point { x: 5, y: 10.4 };
+    let p2 = Point { x: "Hello", y: 'c' };
+
+    let p3 = p1.mixup(p2);
+
+    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+}
+```
+p3.x = 5, p3.y = c
+
+## Traits
+Define Shared Behavior. A trait tells the Rust compiler about functionality a particular type has and can share with other types.
+
+1. Implementing a trait on a type:
+* impl trait-name for type-name 
+* Within the impl block, we put the method signatures that the trait definition has defined. Instead of adding a semicolon after each signature, we use curly brackets and fill in the method body with the specific behavior that we want the methods of the trait to have for the particular type.
+
+```Rust
+pub trait Summary {
+    fn summarize(&self) -> String;
+}
+
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summary for NewsArticle {
+    fn summarize(&self) -> String {
+        format!("{}, by {} ({})", self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summary for Tweet {
+    fn summarize(&self) -> String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+fn main() {
+    let tweet = Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from(
+            "of course, as you probably already know, people",
+        ),
+        reply: false,
+        retweet: false,
+    };
+
+    println!("1 new tweet: {}", tweet.summarize());
+}
+```
+1 new tweet: horse_ebooks: of course, as you probably already know, people
+
+
+2. One restriction to note with trait implementations is that we can implement a trait on a type only if either the trait or the type is local to our crate. This restriction is part of a property of programs called coherence, and more specifically the orphan rule, so named because the parent type is not present. This rule ensures that other people’s code can’t break your code and vice versa.
+
+3. Defaults Implementations
+```Rust
+pub trait Summary {
+    fn summarize_author(&self) -> String;
+
+    fn summarize(&self) -> String {
+        format!("(Read more from {}...)", self.summarize_author())
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+// Definition of a Summary trait with a default implementation of the summarize method
+impl Summary for Tweet {
+    fn summarize_author(&self) -> String {
+        format!("@{}", self.username)
+    }
+}
+
+fn main() {
+    let tweet = Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from(
+            "of course, as you probably already know, people",
+        ),
+        reply: false,
+        retweet: false,
+    };
+
+    println!("1 new tweet: {}", tweet.summarize());
+
+}
+```
+Note that it isn’t possible to call the default implementation from an overriding implementation of that same method.
+
+
+4. Traits as Parameters: how to use traits to define functions that accept many different types.
+
+* We can define a **notify function** that calls the **summarize method** on its **item parameter**, which is of some **type that implements** the **Summary trait**.
+```Rust
+// Instead of a concrete type for the item parameter, we specify the impl keyword and the trait name.
+// This parameter accepts any type that implements the specified trait.
+pub fn notify(item: &impl Summary) {
+    // we can call any methods on item that come from the Summary trait, such as summarize
+    println!("Breaking news! {}", item.summarize());
+}
+```
+note: Code that calls the function with any other type, such as a String or an i32, won’t compile because those types don’t implement Summary.
+
+
+* Trait Bound Syntax
+The impl Trait syntax works for straightforward cases but is actually syntax sugar for a longer form, which is called a trait bound; it looks like this:
+```Rust
+pub fn notify<T: Summary>(item: &T) {
+    println!("Breaking news! {}", item.summarize());
+}
+```
+If we wanted this function to allow **item1** and **item2** to have different types, using impl Trait would be appropriate (as long as both types implement Summary).
+```Rust
+pub fn notify(item1: &impl Summary, item2: &impl Summary) {
+```
+If we wanted to force both parameters to have the same type, that’s only possible to express using a trait bound, like this:
+```Rust
+pub fn notify<T: Summary>(item1: &T, item2: &T) {
+```
+
+* Specifying Multiple Trait Bounds with the + Syntax
+We can specify more than one trait bound. 
+we can specify in the **notify** definition that **item** must **implement** both **Display and Summary**. We can do so using the + syntax:
+```Rust
+pub fn notify(item: &(impl Summary + Display)) {
+```
+The **+** syntax is also valid with trait bounds on generic types:
+With the two trait bounds specified, the body of notify can call summarize and use {} to format item.
+```Rust
+pub fn notify<T: Summary + Display>(item: &T) {
+```
+
+* Clearer Trait Bounds with where Clauses
+Multiple generic type parameters can contain lots of trait bound information between the function’s name and its parameter list, making the function signature hard to read. 
+For this reason, Rust has alternate syntax for specifying trait bounds inside a where clause after the function signature. 
+
+you can use this
+```Rust
+fn some_function<T, U>(t: &T, u: &U) -> i32
+    where T: Display + Clone,
+          U: Clone + Debug
+{
+```
+instead of
+```Rust
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
+```
+
+* Returning Types that Implement Traits
+We can also use the impl Trait syntax in the return position to return a value of some type that implements a trait.
+
+```Rust
+pub trait Summary {
+    fn summarize(&self) -> String;
+}
+
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summary for NewsArticle {
+    fn summarize(&self) -> String {
+        format!("{}, by {} ({})", self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summary for Tweet {
+    fn summarize(&self) -> String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+fn returns_summarizable() -> impl Summary { // return a type that is specified by a trait
+    Tweet { // can be Tweet or Summary type
+        username: String::from("horse_ebooks"),
+        content: String::from(
+            "of course, as you probably already know, people",
+        ),
+        reply: false,
+        retweet: false,
+    }
+}
+```
+Note: You can only use impl Trait if you’re returning a single type.
+Note2: The ability to return a type that is only specified by the trait it implements is especially useful in the context of closures and iterators.
+Example: The impl Trait syntax lets you concisely specify that a function returns some type that implements the Iterator trait without needing to write out a very long type.
+
+* Example: A working definition of the **largest function** that works on **any generic type** that **implements** the **PartialOrd** and **Copy** **traits**
+```Rust
+fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = list[0];
+
+    for &item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn main() {
+    let number_list = vec![34, 50, 25, 100, 65];
+
+    let result = largest(&number_list);
+    println!("The largest number is {}", result);
+
+    let char_list = vec!['y', 'm', 'a', 'q'];
+
+    let result = largest(&char_list);
+    println!("The largest char is {}", result);
+}
+
+```
+
+* Using Trait Bounds to Conditionally Implement Methods
+
+Conditionally implement methods on a generic type depending on trait bounds
+
+```Rust
+use std::fmt::Display;
+
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self { x, y }
+    }
+}
+
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+```
+We can also conditionally implement a trait for any type that implements another trait.
+```Rust
+impl<T: Display> ToString for T {
+```
+Traits and trait bounds let us write code that uses generic type parameters to reduce duplication but also specify to the compiler that we want the generic type to have particular behavior. The compiler can then use the trait bound information to check that all the concrete types used with our code provide the correct behavior.
+
 
 ## Stack-Only Data: Copy
 ```rust
@@ -504,8 +798,9 @@ println!("{}", sum);
 
 e) Generics as Type Classes
 * In Rust, a generic type parameter creates what is known in functional languages as a "type class constraint", and each different parameter filled in by an end user actually changes the type. In other words, Vec<isize> and Vec<char> are two different types, which are recognized as distinct by all parts of the type system.
-* We can create our onw custom typess
+* We can create our own custom typess
 * Rust's additional methods can be type checked when they are used, because their generics are statically defined. That makes them more usable while remaining safe.
+
 
 ### 4) Design Principles
 * SOLID
