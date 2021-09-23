@@ -456,6 +456,150 @@ impl<T: Display> ToString for T {
 ```
 Traits and trait bounds let us write code that uses generic type parameters to reduce duplication but also specify to the compiler that we want the generic type to have particular behavior. The compiler can then use the trait bound information to check that all the concrete types used with our code provide the correct behavior.
 
+## Validating References with Lifetimes
+We must annotate lifetimes when the lifetimes of references could be related in a few different ways.
+Rust requires us to annotate the relationships using generic lifetime parameters to ensure the actual references used at runtime will definitely be valid.
+
+* Syntax
+```Rust
+&i32        // a reference
+&'a i32     // a reference with an explicit lifetime
+&'a mut i32 // a mutable reference with an explicit lifetime
+```
+Note: a lifetime should always be specified in more than one place, else its useless
+
+* Functions
+```Rust
+// Example: In this example, string1 is valid until the end of the outer scope, string2 is valid until the end of the inner scope, and result references something that is valid until the end of the inner scope.
+
+// the annotations go in the function signature, not in the function body.
+fn main() {
+    let string1 = String::from("long string is long");
+
+    {
+        let string2 = String::from("xyz");
+        let result = longest(string1.as_str(), string2.as_str());
+        println!("The longest string is {}", result);
+    }
+}
+
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
+longest string is long string is long
+
+* structs
+A struct that holds a reference, so its definition needs a lifetime annotation
+```Rust
+struct ImportantExcerpt<'a> {
+    part: &'a str,
+}
+
+fn main() {
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+    let i = ImportantExcerpt {
+        part: first_sentence,
+    };
+}
+```
+The data in novel exists before the ImportantExcerpt instance is created. In addition, novel doesn’t go out of scope until after the ImportantExcerpt goes out of scope, so the reference in the ImportantExcerpt instance is valid.
+
+* 3 rules
+The compiler uses three rules to figure out what lifetimes references have when there aren’t explicit annotations.
+
+1. (inputs) The first rule is that each parameter that is a reference gets its own lifetime parameter.
+```Rust
+fn foo<'a, 'b>(x: &'a i32, y: &'b i32); 
+```
+2. (outputs) The second rule is if there is exactly one input lifetime parameter, that lifetime is assigned to all output lifetime parameters.
+```Rust
+fn foo<'a>(x: &'a i32) -> &'a i32.
+```
+3. (outputs) The third rule is if there are multiple input lifetime parameters, but one of them is &self or &mut self because this is a method, the lifetime of self is assigned to all output lifetime parameters.
+```Rust
+impl<'a> ImportantExcerpt<'a> {
+    fn level(&self) -> i32 {
+        3
+    }
+}
+```
+
+* Method Definitions (full example as shown in rule 3 above)
+```Rust
+struct ImportantExcerpt<'a> {
+    part: &'a str,
+}
+
+impl<'a> ImportantExcerpt<'a> {
+    fn level(&self) -> i32 {
+        3
+    }
+}
+
+impl<'a> ImportantExcerpt<'a> {
+    fn announce_and_return_part(&self, announcement: &str) -> &str {
+        println!("Attention please: {}", announcement);
+        self.part
+    }
+}
+
+fn main() {
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+    let i = ImportantExcerpt {
+        part: first_sentence,
+    };
+}
+```
+
+* The Static Lifetime
+This reference can live for the entire duration of the program. All string literals have the 'static lifetime, which we can annotate as follows:
+The text of this string is stored directly in the program’s binary, which is always available. Therefore, the lifetime of all string literals is 'static.
+```Rust
+#![allow(unused)]
+fn main() {
+    let s: &'static str = "I have a static lifetime.";
+}
+```
+
+* Generic Type Parameters, Trait Bounds, and Lifetimes Together
+```Rust
+fn main() {
+    let string1 = String::from("abcd");
+    let string2 = "xyz";
+
+    let result = longest_with_an_announcement(
+        string1.as_str(),
+        string2,
+        "Today is someone's birthday!",
+    );
+    println!("The longest string is {}", result);
+}
+
+use std::fmt::Display;
+
+fn longest_with_an_announcement<'a, T>(
+    x: &'a str,
+    y: &'a str,
+    ann: T,
+) -> &'a str
+where
+    T: Display,
+{
+    println!("Announcement! {}", ann);
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
 
 ## Stack-Only Data: Copy
 ```rust
