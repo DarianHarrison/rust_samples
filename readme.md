@@ -846,15 +846,21 @@ format!("Hello {}!", name);
 ```
 
 ## Test Driven Development
+The program should do what it is expected to do
+
+0. What and When to test ?
+
+One conceptual idea, is to write a "README" file that describes what your program should do and how your program should react to erroneous inputs before you write your code.
+Once you've written your code and you feel ready to make a new release, go through the "README" and ensure that the behavior is still as expected.
+
+* Usually we write unit tests to ensure that our most important pieces of logic (business logic of our application) work.
+* In general it’s a good idea to write integration tests for all types of behavior that a user can observe.
 
 1. Tests Functions are usually divided into 2 categories: unit tests and integration tests. 
-
 * Unit tests are small and more focused, testing one module in isolation at a time, and can test private interfaces.
-
 **src/lib.rs**
 ```Rust
-// Testing a private function (may almost never be used, as it sometimes can be an indicator of a design flaw), private functions generally should be "black-box", anyhow we can test it in this example just for the heck of it.
-// note that we will 90% of time just test public functions, writing too many grannular tests may be overkill, will depend on every use case
+// Example: Testing a private function 
 
 pub fn add_two(a: i32) -> i32 { // Note that the internal_adder function is not marked as pub
     internal_adder(a, 2)
@@ -881,9 +887,11 @@ mod tests { // tests module is just another module.
 ```cargo test``` will run all tests in our project
 
 
-* Integration tests are entirely external to your library and use your code in the same way any other external code would, using only the public interface and potentially exercising multiple modules per test.
+* Integration tests: Testing the app "from the outside", using only the public interface and potentially exercising multiple modules per test.
+By convention, cargo will look for integration tests in the ```tests/``` directory.
+Note: We **DONT** need to annotate any code in tests/integration_test.rs with ```#[cfg(test)]```.
 
-**src/lib.rs**
+**tests/integration_test.rs**
 ```Rust
 // An integration test of a function in the adder crate
 use adder;
@@ -893,6 +901,7 @@ fn it_adds_two() {
     assert_eq!(4, adder::add_two(2));
 }
 ```
+As you add more integration tests, you might want to make more than one file in the tests directory to help organize them; for example, you can group the test functions by the functionality they’re testing. As mentioned earlier, each file in the tests directory is compiled as its own separate crate.
 
 2. common Assert Macros
 ```
