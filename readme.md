@@ -845,8 +845,99 @@ let name = world;
 format!("Hello {}!", name);
 ```
 
-## TODO: Test Driven Development
-test driven development
+## Test Driven Development
+
+1. Tests Functions are usually divided into 2 categories: unit tests and integration tests. 
+
+* Unit tests are small and more focused, testing one module in isolation at a time, and can test private interfaces.
+
+**src/lib.rs**
+```Rust
+// Testing a private function (may almost never be used, as it sometimes can be an indicator of a design flaw), private functions generally should be "black-box", anyhow we can test it in this example just for the heck of it.
+// note that we will 90% of time just test public functions, writing too many grannular tests may be overkill, will depend on every use case
+
+pub fn add_two(a: i32) -> i32 { // Note that the internal_adder function is not marked as pub
+    internal_adder(a, 2)
+}
+
+fn internal_adder(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+#[cfg(test)] // tells Rust to compile and run the test code only when you run cargo test, not when you run cargo build
+mod tests { // tests module is just another module. 
+
+    // The tests module is a regular module that follows the usual visibility rules
+    use super::*; // in this test, we bring all of the test module’s parent’s items into scope with use super::*
+
+    #[test] // this attribute indicates this is a test function, so the test runner knows to treat this function as a test
+    fn internal() { // Tests are just Rust code
+
+        // Checking Results with the assert! Macro to ensure that some condition in a test evaluates to true
+        assert_eq!(4, internal_adder(2, 2)); // the test calls internal_adder
+    }
+}
+```
+```cargo test``` will run all tests in our project
+
+
+* Integration tests are entirely external to your library and use your code in the same way any other external code would, using only the public interface and potentially exercising multiple modules per test.
+
+**src/lib.rs**
+```Rust
+// An integration test of a function in the adder crate
+use adder;
+
+#[test]
+fn it_adds_two() {
+    assert_eq!(4, adder::add_two(2));
+}
+```
+
+2. common Assert Macros
+```
+assert_eq!
+assert_ne!
+```
+
+3. Controlling How Tests Are Run
+
+```cargo test``` compiles your code in test mode and runs the resulting test binary. You can specify command line options to change the default behavior of cargo test. 
+
+* Running Tests in Parallel or Consecutively
+```Bash
+cargo test # by default testes run in parallel
+cargo test -- --test-threads=1 # if you dont want your testes to run in parallel
+```
+
+* run a single test
+```Rust
+    // somewhere in your test code 
+    #[test]
+    fn one_hundred() {
+        assert_eq!(102, add_two(100));
+    }
+```
+```Bash
+cargo test one_hundred
+```
+
+* Ignoring Some Tests Unless Specifically Requested
+```Rust
+#[test]
+fn it_works() {
+    assert_eq!(2 + 2, 4);
+}
+
+#[test]
+#[ignore]
+fn expensive_test() {
+    // code that takes an hour to run
+}
+```
+```Bash
+cargo test -- --ignored
+```
 
 ## Design Patterns and Best Practices
 ```
