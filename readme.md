@@ -396,10 +396,11 @@ Example: The impl Trait syntax lets you concisely specify that a function return
 
 * Example: A working definition of the **largest function** that works on **any generic type** that **implements** the **PartialOrd** and **Copy** **traits**
 ```Rust
-fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
-    let mut largest = list[0];
+// Largest Function with Trait Bounds
+fn largest<T: PartialOrd>(list: &[T]) -> &T { // avoid heap allocations
+    let mut largest = &list[0];
 
-    for &item in list {
+    for item in list.iter() {
         if item > largest {
             largest = item;
         }
@@ -419,7 +420,6 @@ fn main() {
     let result = largest(&char_list);
     println!("The largest char is {}", result);
 }
-
 ```
 
 * Using Trait Bounds to Conditionally Implement Methods
