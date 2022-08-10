@@ -159,7 +159,7 @@ same as:  let a = [3, 3, 3, 3, 3];
 ```rust
 let i = 10
 let y_order = 3
-let mut a: Vec<usize> = if (i < y_order) { vec![y_order[i]] } else { Vec::new() };
+let a: Vec<usize> = if (i < y_order) { vec![y_order[i]] } else { Vec::new() };
 ```
 
 ## Generic Data Types
